@@ -1,5 +1,5 @@
 # rmt-reloaded
-Real Mouse Trap - 3D game restoration project
+## Real Mouse Trap - 3D game restoration project
 
 After 20 years I have found this piece of C++ code on a rusty DVD. This was my first finished work because it was my thesis in the programmer school where I was belonged to. It's a simple DOS game fitted for a 1.4 Mb floppy disc. As I remember, the concept was simple: make a Wolfenstein remake for kids without any political relevancies, guns, or any blood. The work has taken about three months and made it alone. At that time I had not many programming experiences but I was determined.  Just like now :)
 
