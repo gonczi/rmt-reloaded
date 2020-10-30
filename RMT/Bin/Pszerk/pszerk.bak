@@ -1,0 +1,578 @@
+#define STEP 9
+#define R    2
+#define SIZEX 50
+#define SIZEY 50
+
+#include <graphics.h>
+#define  point  pointtype
+
+#include "c:\bc45\bin\main\mouse.cpp"
+
+#include <io.h>
+#include <stdio.h>
+#include <conio.h>
+#include <iostream.h>
+
+#include <fcntl.h>
+#include <stdlib.h>
+
+#include "list.cpp"
+
+typedef char table[SIZEX][SIZEY];
+
+//-----------------------globals:---------------------------------------
+	char filename[20];
+	char str_tbl[20];
+	char str_wty[20];
+	int wallid=0;
+	char paintc=0;
+	table tableH,tableV;
+
+//----------------------------------------------------------------------
+char upcase(char in)
+{
+	return (((in>='a') && (in<='z'))?(in+('A'-'a')):in);
+};
+void showtable(table t,int tx,int ty)
+{
+	for ( int x=0 ; x<SIZEX ; x++ )
+		for ( int y=0 ; y<SIZEY ; y++ )
+		{
+	  //		putpixel( tx+x, ty+y, t[x][y]);
+		}
+}
+int Oabs(int num)
+{	return( (num>0)?num:(-num) ); };
+
+int Opolar(int num)
+{	return( num?((num>=0)?1:-1 ):0); };
+
+typedef enum aspect_ty{ H , V };
+
+typedef struct wall
+{
+	point poz;
+	aspect_ty aspect;
+};
+
+struct wall_link
+{
+	wall	wall;
+	wall_link* next;
+}*  whead=NULL ;           // <-- " wall chain's " head NOW!!!
+
+struct wall_type
+{
+	char name[40];
+	int id;
+	char c;
+	wall_type* next;
+}* wthead=NULL;
+
+void getmousepoz(point &poz)
+{
+	poz.x=MouseX();
+	poz.y=MouseY();
+};
+
+int instep(int poz)
+{	return (((poz+(STEP>>1))/STEP)*STEP); };
+
+void Oputsign(point poz,char c,char r)
+{
+	if ( (poz.x<(SIZEX * STEP-(STEP>>1))) && (poz.y<(SIZEY * STEP-(STEP>>1))) )
+	{
+		setcolor(c);
+		HideMouse();
+		circle(instep(poz.x),instep(poz.y), r );
+		ShowMouse();
+	};
+};
+
+void showsign(point poz)
+{
+	Oputsign(poz,WHITE,R);
+}
+
+void hidesign(point poz)
+{
+	Oputsign(poz,BLACK,R);
+}
+
+
+void Oputline(point p1,point p2,char c)
+{
+	setcolor(c);
+	HideMouse();
+	p1.x=instep(p1.x);
+	p1.y=instep(p1.y);
+
+	int 	dx=((instep(p2.x)-p1.x)/STEP),
+			dy=((instep(p2.y)-p1.y)/STEP);
+
+	p1.x+=Opolar(dx);
+	p1.y+=Opolar(dy);
+	for ( int ds=0 ; ds<Oabs(dx?dx:dy) ; ds++ )
+	{
+		line(	p1.x,
+				p1.y,
+				p1.x+(Opolar(dx)*(STEP-2)),
+				p1.y+(Opolar(dy)*(STEP-2)) );
+
+		p1.x+=Opolar(dx)*(STEP) ;
+		p1.y+=Opolar(dy)*(STEP) ;
+	};
+	ShowMouse();
+};
+
+void memo(point p1,point p2)
+{
+	p1.x=(instep(p1.x)/STEP);
+	p1.y=(instep(p1.y)/STEP);
+	p2.x=(instep(p2.x)/STEP);
+	p2.y=(instep(p2.y)/STEP);
+	if ( p1.x==p2.x )
+	{
+		if ( p1.y==p2.y ) return;
+		if ( p1.y>p2.y )
+		{
+			register int puff=p1.y;
+			p1.y=p2.y;
+			p2.y=puff;
+		}
+		while ( p1.y<p2.y ) tableV[p1.x][p1.y++]=wallid ;
+	}else
+		{
+			if ( p1.y!=p2.y ) return;
+			if ( p1.x>p2.x )
+			{
+				register int puff=p1.x;
+				p1.x=p2.x;
+				p2.x=puff;
+			}
+			while ( p1.x<p2.x ) tableH[p1.x++][p1.y]=wallid ;
+		};
+};
+
+void showline(point p1,point p2)
+{
+	Oputline(p1,p2, paintc );
+};
+void hideline(point p1,point p2)
+{
+	Oputline(p1,p2,BLACK);
+};
+void rowcat(elem *output,wall_type* wt,elem *next)
+{
+	strcpy(output->szov,"id:");
+	char sid[4];
+	itoa(wt->id,sid,10);
+	strcat(output->szov,sid);
+
+	strcat(output->szov," c:");
+	char sc[4];
+	itoa(wt->c,sc,10);
+	strcat(output->szov,sc);
+
+	strcat(output->szov," ");
+	strcat(output->szov,wt->name);
+
+	output->id=wt->id;
+	output->next=next;
+};
+#define NUM 0
+#define STR 1
+void readline(int mode,char *str,int length,int y)
+{
+	char bill=0;
+	int l=0;
+	while( ( ((bill=getch())!=13) & (l<length) ) | (l==0) )
+	{
+		bar(	(SIZEX * STEP),
+				(getmaxy()/2)+y,
+				getmaxx(),
+				(getmaxy()/2)+y+8 );
+		if (	( (bill>='0') & (bill<='9') & (mode==NUM) ) |
+				( (bill>='a') & (bill<='z') & (mode==STR) ) |
+				( (bill>='A') & (bill<='Z') & (mode==STR) )  )
+		{
+			str[l++]=bill;
+		};
+		if (	bill==8  )
+		{
+				str[l?--l:0]=0;
+		};
+		outtextxy( 	(SIZEX * STEP),
+						(getmaxy()/2)+y,
+						str );
+	}
+}
+
+list* wtlist;
+elem* ehead=NULL;
+void showconsol()
+{
+	setfillstyle(1,1);
+	bar(	(SIZEX * STEP),
+			(getmaxy()/2)+70,
+			getmaxx(),
+			getmaxy() );
+};
+void hideconsol()
+{
+	setfillstyle(0,1);
+	bar(	(SIZEX * STEP),
+			(getmaxy()/2)+70,
+			getmaxx(),
+			getmaxy() );
+};
+void newtype()
+{
+	showconsol();
+	setcolor(WHITE);
+	outtextxy( 	(SIZEX * STEP),
+					(getmaxy()/2)+72,
+					" new type's name:(q)" );
+
+	char str[40];
+	for ( int l=0 ;  l<40 ; str[l++]=0 );
+	readline(STR,str,40,82);
+	if ( (upcase(str[0])=='Q') && (str[1]==0) )
+	{
+		hideconsol();
+		return;
+	};
+	outtextxy( 	(SIZEX * STEP),
+					(getmaxy()/2)+92,
+					"   new type's id: " );
+	char sid[10];
+	for ( l=0 ;  l<10 ; sid[l++]=0 );
+	readline(NUM,sid,6,102);
+
+
+	outtextxy( 	(SIZEX * STEP),
+					(getmaxy()/2)+112,
+					"new type's color: " );
+	char sc[4];
+	for ( l=0 ;  l<4 ; sc[l++]=0 );
+	readline(NUM,sc,2,122);
+
+	wall_type* wt=new wall_type;
+	strcpy(wt->name,str);
+	wt->id=atoi(sid);
+	wt->c=atoi(sc);
+	wt->next=wthead;
+	wthead=wt;
+
+	elem* uj=new elem;
+	rowcat(uj,wt,ehead);
+	ehead=uj;
+
+	wtlist->refresh(ehead);
+	hideconsol();
+};
+void delelem(int id)
+{
+	if ( id )
+	{
+		elem* puff=ehead;
+		if ( puff->id==id )
+		{
+			puff=ehead->next;
+			delete ehead;
+			ehead=puff;
+		}	else
+			{
+				while ( (puff->next!=NULL) && (puff->next->id!=id) ) puff=puff->next;
+				elem* puff2=puff->next->next;
+				delete puff->next;
+				puff->next=puff2;
+			};
+	}
+};
+void deltype(int id)
+{
+	if ( id )
+	{
+		wall_type* puff=wthead;
+		if ( puff->id==id )
+		{
+			puff=wthead->next;
+			delete wthead;
+			wthead=puff;
+		}	else
+			{
+				while ( (puff->next!=NULL) && (puff->next->id!=id) ) puff=puff->next;
+				wall_type* puff2=puff->next->next;
+				delete puff->next;
+				puff->next=puff2;
+			};
+	}
+}
+char getpaintc(int id)
+{
+	wall_type *puff=wthead;
+	while ( (puff!=NULL) & (puff->id!=id) ) puff=puff->next;
+	return ( (puff==NULL)?0:puff->c );
+};
+
+void refresh()
+{
+
+	for ( int x=0 ; x<(SIZEX * STEP) ; x+=STEP )
+		for ( int y=0 ; y<(SIZEY * STEP) ; y+=STEP )
+		{
+			setcolor((tableV[x/STEP][y/STEP]));
+			line(x,y+1,x,y+STEP-1);
+
+			setcolor((tableH[x/STEP][y/STEP]));
+			line(x+1,y,x+STEP-1,y);
+
+			putpixel(x,y,LIGHTGRAY);
+		};
+};
+
+void main()
+{
+
+	wthead=new wall_type;
+	strcpy(wthead->name,"- CLEAR -");
+	wthead->id=wallid;
+	wthead->c=paintc;
+	wthead->next=NULL;
+
+	ehead=new elem;
+	rowcat(ehead,wthead,NULL);
+	for ( int tx=0 ; tx<SIZEX ; tx++ )
+		for ( int ty=0 ; ty<SIZEY ; ty++ )
+		{
+			tableH[tx][ty]=tableV[tx][ty]=0;
+		}
+
+	clrscr();
+	for ( int b=0 ; b<80 ; b++ )putch('*');
+	cout << "\n\tOWL\n\n";
+	for ( b=0 ; b<80 ; b++ )putch('*');
+	cout << "open an existing file or create new (o/c): ";
+	if ( upcase(getche())=='O' )
+	{
+		int f=0;
+		cout <<"\nfiles' name: ",
+		cin  >> filename ;
+		strcpy(str_tbl,filename);
+		strcat(str_tbl,".tbl");
+		strcpy(str_wty,filename);
+		strcat(str_wty,".wty");
+		if ( (f=open(str_tbl,O_BINARY))!=-1 )
+		{
+			if ( 	(read(f,tableH,sizeof(table))==sizeof(table)) &
+					(read(f,tableV,sizeof(table))==sizeof(table)) )
+			cout << " tbl read ok\n ";
+			else cout <<" tbl read error\n";
+			close(f);
+		}
+		if ( (f=open(str_wty,O_BINARY))!=-1 )
+		{
+			cout << "open wty ok\n";
+			wall_type  * puff=new wall_type;
+			while ( read(f,puff,sizeof( wall_type ))==sizeof( wall_type ) )
+			{
+				printf("%s\n",puff->name);
+				puff->next=wthead;
+				wthead=puff;
+				puff=new wall_type ;
+			}
+			delete puff;
+			close(f);
+			cout << "read wty ok\n";
+
+			puff=wthead;
+			while ( puff->next!=NULL )
+			{
+				elem* uj=new elem;
+				rowcat(uj,puff,ehead);
+				ehead=uj;
+				puff=puff->next;
+			};
+			cout << " wty ok\n ";
+		} else
+			{
+				cout << " - wty open error.. -\n";
+			}
+		getch;
+	};
+
+	int gr=DETECT , md;
+	initgraph( &gr , &md , "C:\\bc45\\bgi" );
+
+	refresh();
+
+	wtlist=new list(	(SIZEX * STEP),
+							0,
+							getmaxx()-(SIZEX * STEP),
+							getmaxy()/2,
+							ehead	);
+
+	list* wpozlist=new list(	(SIZEX * STEP),
+										(getmaxy()/2)+10,
+										getmaxx()-(SIZEX * STEP),
+										50,
+										NULL	);
+	ShowMouse();
+
+	int exit=1;
+
+	mouse_x_limit(0,(SIZEX-1) * STEP);
+	mouse_y_limit(0,(SIZEY-1) * STEP);
+	while ( exit )
+	{
+		if ( kbhit() )
+		{
+			char bill=getch();
+			if ( bill )
+			{
+				switch(upcase(bill))
+				{
+					case 'S' :
+									int f;
+							if ( filename[0]==0 )
+							{
+									showconsol();
+									outtextxy( 	(SIZEX * STEP),
+													(getmaxy()/2)+72,
+													"- save (else q) -" );
+									outtextxy( 	(SIZEX * STEP),
+													(getmaxy()/2)+82,
+													"files name:" );
+									for ( int l=0 ;  l<40 ; filename[l++]=0 );
+									readline(STR,filename,40,92);
+									if ( (upcase(filename[0])=='Q') && (filename[1]==0) )
+									{
+										hideconsol();
+										return;
+									};
+							};
+									strcpy(str_tbl,filename);
+									strcat(str_tbl,".tbl");
+									strcpy(str_wty,filename);
+									strcat(str_wty,".wty");
+									if ( (f=open(str_tbl,O_BINARY | O_CREAT | O_TRUNC | O_RDWR))==-1 )
+									{
+										showconsol();
+										outtextxy( 	(SIZEX * STEP),
+													(getmaxy()/2)+72,
+													"- wty open error ... -" );
+										getch();
+									}	else
+										{
+											if ( (write(f,tableH,sizeof(table))!=sizeof(table))  | \
+												  (write(f,tableV,sizeof(table))!=sizeof(table))	)
+											{
+												showconsol();
+												outtextxy( 	(SIZEX * STEP),
+																(getmaxy()/2)+72,
+																"- tbl write error ... -" );
+												getch();
+											}	else close(f);
+										}
+									if ( (f=open(str_wty,O_BINARY | O_CREAT | O_TRUNC | O_RDWR))==-1 )
+									{
+										showconsol();
+										outtextxy( 	(SIZEX * STEP),
+													(getmaxy()/2)+72,
+													"- wty open error ... -" );
+										getch();
+									 }	else
+											{
+												wall_type *puff=wthead;
+												while( puff!=NULL )
+												{
+													if ( puff->id!=0 )
+														write(f,puff,sizeof(wall_type));
+													puff=puff->next;
+												}
+												close(f);
+											};
+									hideconsol();
+					case 'Q' :
+									showconsol();
+									outtextxy( 	(SIZEX * STEP),
+													(getmaxy()/2)+72,
+													"- exit without save -" );
+									outtextxy( 	(SIZEX * STEP),
+													(getmaxy()/2)+82,
+													"are you sure ? (y/n)" );
+									if ( upcase(getch())=='Y' )
+									exit=0;
+									hideconsol();
+									break;
+					case 'N':
+									newtype();
+									break;
+					case 'R':
+									refresh();
+                           break;
+					case 'D':
+									showconsol();
+									setcolor(WHITE);
+									outtextxy( 	(SIZEX * STEP),
+													(getmaxy()/2)+72,
+													"- delete this type -" );
+									outtextxy( 	(SIZEX * STEP),
+													(getmaxy()/2)+82,
+													"are you sure ? (y/n)" );
+									if ( upcase(getch())=='Y' )
+									{
+										deltype(wallid);
+										delelem(wallid);
+										wtlist->refresh(ehead);
+									};
+									hideconsol();
+									break;
+				}
+			}	else
+				{
+					bill=getch();
+					switch(bill)
+					{
+						case 72: wtlist->up();
+									break;
+						case 80: wtlist->down();
+									break;
+						default: ;
+					};
+				};
+			paintc=getpaintc(wallid=wtlist->getid());
+		};
+		int mc;
+		if ( (mc=MouseClick())!=0 )
+		{
+			point mp,mpl,mp2;
+
+			getmousepoz(mp);
+			getmousepoz(mpl);
+
+			while( MouseClick()==mc )
+			{
+				getmousepoz(mp2);
+				if ( Oabs(mp.x-mp2.x) > Oabs(mp.y-mp2.y) )
+				{
+					mp2.y=mp.y;
+				}	else
+					{
+						mp2.x=mp.x;
+					};
+				if ( (mpl.x!=mp2.x) || (mpl.y!=mp2.y) )
+				{
+					hideline(mp,mpl);
+					showline(mp,mp2);
+					mpl.x=mp2.x;
+					mpl.y=mp2.y;
+				};
+			}
+			memo(mp,mp2);
+			showtable(tableV,SIZEX*STEP,(getmaxy()/2)+72);
+         showtable(tableH,SIZEX*STEP+SIZEX,(getmaxy()/2)+72);
+		}
+	}
+}

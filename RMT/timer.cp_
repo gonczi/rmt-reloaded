@@ -1,0 +1,187 @@
+#ifndef _TIMER_CPP
+	#define _TIMER_CPP
+
+#include "typedef.cpp"
+#include "error.cpp"
+
+#include <stddef.h>
+#include <dos.h>
+
+#define TMR_INT 0X1C
+
+#define  CALL_NORMAL_TPROC  0
+//****************************** TObj Actions:
+/*
+	a timer proc futása alatt nem híható:            !!!
+		DelTimer
+		SetTimer
+*/
+#define  CALL_PROC  1
+#define  INC_COUNT   2
+
+#ifdef __cplusplus
+	 #define __CPPARGS ...
+#else
+	 #define __CPPARGS
+#endif
+
+#define PROC_ON  Not_RuningNow=FALSE;
+#define PROC_OFF Not_RuningNow=TRUE;
+
+class TTimer;
+//-----------------------------------------------------------------------------
+class TProc	{
+public:
+	int Id;
+	int Count;
+	int Limit;
+	int Mode;
+	TTimer* PObj;
+	TProc * Next;
+	TProc( TTimer* iPObj, int iId, int iMode, int iLimit , TProc* iNext );
+	BOOL Find( TTimer* iPObj, int iId )	{
+		if ( (PObj==iPObj) && ((Id==(~0))?TRUE:(Id==iId)) ) 	return TRUE;
+		return FALSE;
+	}
+	~TProc();
+}
+/***************************************************/
+/***/															/***/
+/***/			*_TimerProc_List_Head=NULL;			/***/
+/***/															/***/
+/***************************************************/
+TProc::TProc( TTimer* iPObj, int iId, int iMode, int iLimit , TProc* iNext )	{
+	Eout << "<------------------ SetTimer: " << (void*)iPObj << " Id: "<< iId << "\n";
+	PObj=iPObj;
+	Id=iId;
+	Mode=iMode;
+	Limit=iLimit;
+	Next=iNext;
+	Count=0;
+	register TProc *Now=_TimerProc_List_Head;
+	while	( Now )	{
+		Eout << "marad: " << (void *)Now << " \n";
+		Now=Now->Next;
+	}
+};
+
+TProc::~TProc()	{
+		Eout << "------------------> DelTimer: " << (void*)PObj << " Id: "<< Id << "\n";
+		register TProc *Now=_TimerProc_List_Head;
+		while	( Now )	{
+			Eout << "marad: " << (void *)Now << " \n";
+			Now=Now->Next;
+		}
+	}
+
+void interrupt ( *_OldInterrupt)(__CPPARGS);
+void interrupt _Interrupt(__CPPARGS);
+
+BOOL Not_RuningNow=TRUE;
+
+//-----------------------------------------------------------------------------
+
+class TTimer	{
+public:
+	virtual void TimerProc( int Id ){ ; };
+	int Count;
+	void SetTimer( int Id ,int Mode  ,  int Limit  );
+	BOOL DelTimer( int Id  );
+	~TTimer();
+};
+
+//------------------------------------------
+//----------------------------------------- TTimer:
+
+void TTimer::SetTimer( int Id ,  int Mode  ,  int Limit  )	{
+	PROC_ON;
+	_TimerProc_List_Head =	new TProc( 	this , Id , Mode	,
+													Limit ,_TimerProc_List_Head ) ;
+	PROC_OFF;
+};
+
+//----------------------------------------- TTimer:
+BOOL TTimer::DelTimer( int Id )	{
+	PROC_ON;
+	BOOL ret=FALSE;
+	if ( _TimerProc_List_Head  )	{
+		if ( _TimerProc_List_Head->Find( this , Id ) )	{
+			register TProc *Now=_TimerProc_List_Head;
+			_TimerProc_List_Head=_TimerProc_List_Head->Next;
+			delete Now;
+			Eout << "timer del head: \n";
+		}	else	{
+				register TProc *Now=_TimerProc_List_Head;
+				while ( Now->Next )	{
+					if (  (Now->Next)->Find( this , Id ) )	{
+						register TProc *Puff = Now->Next;
+						Now->Next=Now->Next->Next;
+						delete Puff;
+						Eout << "timer del tag: \n";
+						PROC_OFF;
+						return TRUE;
+					};
+					Now=Now->Next;
+				}
+			};
+		ret=TRUE;
+	};
+	PROC_OFF;
+	return ret;
+};
+//----------------------------------------- TTimer:
+
+TTimer::~TTimer()	{
+	PROC_ON;
+		while (DelTimer( ~0 ));  // clear all ...
+	PROC_OFF;
+};
+
+//*****************************************************************************
+
+void interrupt _Interrupt(__CPPARGS)	{
+	if ( Not_RuningNow )	{
+		PROC_ON;
+		register TProc *Calling=_TimerProc_List_Head;
+		while ( Calling )	{
+			if ( (Calling->Count++)==(Calling->Limit) )	{
+				if ( Calling->Mode==CALL_PROC )	{
+							Calling->PObj->TimerProc( Calling->Id );
+				}	else	Calling->PObj->Count++;
+				Calling->Count=0;
+			};
+			Calling=Calling->Next;
+		}
+		PROC_OFF;
+	}
+  _OldInterrupt();
+}
+
+//*****************************************************************************
+
+//*****************************************************************************
+extern BOOL Timer_Installed=FALSE;
+
+void InstallTimer()	{
+	if ( !Timer_Installed )	{
+		Eout << "************************************ INSTALL TIMER *************\n";
+		_OldInterrupt= getvect( TMR_INT );
+		setvect( TMR_INT , _Interrupt );
+		Timer_Installed=TRUE;
+	};
+};
+
+void ResumeTimer()	{
+	if ( Timer_Installed  )	{
+		Eout << "************************************ resume TIMER *************\n";
+		setvect( TMR_INT , _OldInterrupt);
+		while	( _TimerProc_List_Head    )	{
+			register TProc *Puff=_TimerProc_List_Head->Next;
+			delete _TimerProc_List_Head;
+			_TimerProc_List_Head=Puff;
+		}
+		Timer_Installed=FALSE;
+	};
+};
+
+#endif //_TIMER_CPP

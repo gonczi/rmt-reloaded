@@ -1,0 +1,86 @@
+  **** begin LOOP
+- FULL MEM: 5232
+ new bonus 
+- FULL MEM: 300480
+ new bonus
+ end bonus 
+- FULL MEM: 306544
+ delete bonus !!!  ha ez van akkor ok
+ new bonus
+ delete bonus !!!  ha ez van akkor ok
+ new bonus
+ delete bonus !!!  ha ez van akkor ok
+ new bonus
+ delete bonus !!!  ha ez van akkor ok
+  **** end   LOOP
+- FULL MEM: 5232
+  **** begin LOOP
+- FULL MEM: 5232
+ new bonus 
+- FULL MEM: 274080
+ new bonus
+ end bonus 
+- FULL MEM: 280144
+ new bonus
+ delete bonus !!!  ha ez van akkor ok
+ delete bonus !!!  ha ez van akkor ok
+ new bonus 
+- FULL MEM: 273920
+ new bonus
+ end bonus 
+- FULL MEM: 279984
+ new bonus 
+- FULL MEM: 279904
+ new bonus
+ end bonus 
+- FULL MEM: 280000
+ delete bonus !!!  ha ez van akkor ok
+ delete bonus !!!  ha ez van akkor ok
+ new bonus
+ delete bonus !!!  ha ez van akkor ok
+ new bonus 
+- FULL MEM: 273680
+ new bonus
+ end bonus 
+- FULL MEM: 279744
+ delete bonus !!!  ha ez van akkor ok
+ new bonus
+ delete bonus !!!  ha ez van akkor ok
+ new bonus 
+- FULL MEM: 273520
+ new bonus
+ end bonus 
+- FULL MEM: 279584
+ delete bonus !!!  ha ez van akkor ok
+ new bonus
+ delete bonus !!!  ha ez van akkor ok
+ new bonus 
+- FULL MEM: 273360
+ new bonus
+ end bonus 
+- FULL MEM: 279424
+ delete bonus !!!  ha ez van akkor ok
+ new bonus 
+- FULL MEM: 280528
+ new bonus
+ end bonus 
+- FULL MEM: 286592
+ delete bonus !!!  ha ez van akkor ok
+ new bonus
+ delete bonus !!!  ha ez van akkor ok
+ new bonus 
+- FULL MEM: 273120
+ new bonus
+ end bonus 
+- FULL MEM: 279184
+ delete bonus !!!  ha ez van akkor ok
+  **** end   LOOP
+- FULL MEM: 5232
+  **** begin LOOP
+- FULL MEM: 5232
+  **** end   LOOP
+- FULL MEM: 5264
+  **** begin LOOP
+- FULL MEM: 5296
+  **** end   LOOP
+- FULL MEM: 5264

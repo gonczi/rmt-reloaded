@@ -1,0 +1,120 @@
+
+***************
+** Telepítés **
+***************
+
+Indítsuk el a telepítõ lemezen található Install.exe programot.
+A program az indulás után rákérdez annak a könyvtárnak a nevére amelyikbe
+telepíteni szeretnénk a játékot. Ha nem létezõ könyvtárat adunk meg itt
+akkor az automatikusan létre lesz hozva. Ha a telepítõ nem jelez hibát
+akkor végeztünk is a telepítéssel. Ellenkezõ esetben vizsgáljuk meg a
+telepítõ lemezen található fájlokat hogy mindegyik megtalálható-e,
+a files.txt szöveges fájlban leírtaknak megfelelõen.
+
+**********************
+** A játék indítása **
+**********************
+
+Ha mindent jól csináltunk, és nem hiányzik egyetlen fájl sem akkor
+elindíthatjuk a Start.bat -et. Az indítás után egy ellenõrzõ folyamat
+fog elindulni amely leellenõrzi hogy a programhoz tartozó könyvtárakban
+megtalálható e minden kiegészítõ fájl. Ha az program hibát jelez, akkor
+ellenõrizzük hogy a könyvtárak valóban a megfelelõ helyen vannak. Ezek
+után megjelenik az intro, köszöntõ képe. Ahogy azt a képernyõ bal alsó
+sarkában megjelenõ felirat jelzi, a tovább jutáshoz nyomjuk meg a SPACE
+gombot. Ekkor megjelenik a játék fõ menüje.
+
+*************
+** A menük **
+*************
+
+A menüpontok között a tabulátor illetve a fel, le irány gombokkal, vagy az egér
+segítségével navigálhatunk. Ez az irányító billentyûk beállító menüjén (CONTROL)
+kívül igaz a menüben mindenütt. A CONTROL menüben csak a tabulátor billentyû,
+vagy az egér segítségével választhatjuk ki a kívánt menüpontokat.
+Értelemszerûen a NEW GAME menü segítségével indíthatunk új játszmát.
+Ebben az almenüben, miután megadtuk a nevünket a START gomb megnyomása után
+indul a játszma. A TOP5 almenüben tekinthetjük meg az öt legjobb játékos
+nevét. Természetesen közvetlenül a telepítés után ez a menü még üres.
+A CONTROL menüben beállíthatjuk, hogy a játék során mely irányító gombokat
+kívánjuk majd használni. A beállításhoz álljunk a módosítani kívánt
+menüpontra majd nyomjuk meg a használni kívánt billentyût. Ügyeljünk arra,
+hogy ne állítsunk be ugyanolyan értéket több helyre, mert akkor nem tudjuk
+majd megfelelõen irányítani a játékot. A játékból az EXIT gombbal tudunk
+kilépni. Ilyenkor a program megerõsítést vár a szándékunkról, és ha valóban
+ki szeretnénk lépni a programból, akkor válasszuk a YES gombot. A fõmenübe
+való visszatéréshez használjuk a NO gombot. A fõmenü a játék során bármikor
+elérhetõ az ESC billentyûvel. A játék folytatásához nyomjuk meg újra az
+ESC billentyût.
+
+********************
+** A játék célja  **
+********************
+
+A feladat, hogy minden pályán összegyûjtsünk 7 darab virágot, tetszõleges
+sorrendben minél rövidebb idõ alatt. A virágok a pályán szerteszét találhatóak,
+és a térképen fehér pont jelöli õket. Ha összegyûjtöttünk minden virágot az
+adott pályán, akkor egy villogó felirat fogja jelezni nekünk, hogy a feladat
+teljesítve lett. Ne ijedjünk meg, amikor ez a felirat villog akkor a
+játékosunk már sérthetetlen. A pályán található néhány nagyon hasznos holmi,
+amit érdemes összegyûjtenünk. Amikor egy macska elkap a pályán, akkor
+fogy az energiánk. Ha ez az energia végleg elfogyott, akkor vége a játéknak.
+Éppen ezért, hogy plusz energiához jussunk érdemes összegyûjteni minden
+sajtot a pályán, ugyanis az növeli a már megfogyatkozott energiaszintünket.
+Tipp: Ha nem hiányzik az energiánkból nem érdemes a sajtokat felvenni,
+mert így nem lesz több energiánk, de a sajt az már nem lesz ott legközelebb.
+A macskákat azonban meg tudjuk bénítani bizonyos idõre, ha megdobjuk õket
+paradicsommal. Ehhez persze szükségünk van munícióra, amit a paradicsomos
+kosarakban találunk. Minden paradicsomos kosárban 30 darab paradicsom van,
+és ha megszereztük akkor megjelenik egy számláló a képernyõ jobb felsõ
+sarkában ami jelzi, hogy hány darab lövedékünk van még.
+
+*************************
+** A térkép használata **
+*************************
+
+Ha a játék közben megnyomjuk a tabulátor (TAB) billentyût a játék megáll,
+és megjelenik a pálya térképe. Ezen a térképen egy villogó vörös folt jelzi
+a pozíciónkat. A többi színes pont pedig  a macskákat, sajtokat és egyéb
+hasznos dolgot mutat meg nekünk. A színek magyarázatát a jobb oldali kis
+kép mutatja. A térkép bal alsó sarkában megjelenõ forgó nyíl, miután megállt
+azt az irányt mutatja amelyik irányba néz a játékos jelen pillanatban a pályán.
+Érdemes használni a térképet, hogyha nem akarunk órákig barangolni a
+labirintusban, de figyeljünk oda, hogy a játék idõ a térkép nézegetése
+alatt is folyamatosan megy, és nem áll meg amíg nem teljesítettük
+küldetésünket. A térképbõl visszatérni a játékba a TAB vagy az ESC
+billentyûkkel tudunk.
+Amikor teljesítettünk egy pályát a nevünk és az idõnk automatikusan
+bekerül a legjobb öt közé ha jó az eredményünk.
+
+************************
+** Kilépés a játékból **
+************************
+
+A játék futása során bármikor kiléphetünk a programból, ha a fõmenüben
+az EXIT gombra kattintunk. A fõmenü, minden esetben az Esc gombbal érhetõ el.
+
+****************************
+** A program eltávolítása **
+****************************
+
+A program eltávolításához a rendszerünkbõl, egyszerûen csak töröljük a
+programot tartalmazó könyvtárat az alkönyvtárakkal együtt. Az eltávolítás
+nem okoz önmagában hibát a rendszerünkben, ha csak a programhoz tartozó
+fájlokat töröljük.
+
+*******************************
+** Minimális PC konfiguráció **
+*******************************
+	·	Pentium 166Mhz-es processzor
+	·	640 KB szabad RAM
+	·	DOS operációs rendszer, vagy Windows teljes DOS támogatással
+
+
+Have a lot of fun ...                            Gönczi Zoltán
+                                                 Tatabáya 2002
+                                                    - Owl -
+
+Megjegyzés:
+         remélem legközelebb már Linux alatt találkozunk :).
+
