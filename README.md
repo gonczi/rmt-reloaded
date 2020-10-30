@@ -9,4 +9,4 @@ So I decided that I will renovate this junk of legacy codes to build something u
 
 Anway, "Have a lot of fun! " - as I said for myself two decades ago.
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![alt text](https://raw.githubusercontent.com/gonczi/rmt-reloaded/main/img/intro/intro.bmp "Logo Title Text 1")
