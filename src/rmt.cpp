@@ -13,6 +13,8 @@ long _SpeedNum=0;
 #include "fileinsp.h"
 // #include "gameover.cpp"
 
+#include <stdio.h>
+
 int GLevel = 1;
 
 int main()
@@ -26,7 +28,7 @@ int main()
 	// InitScan();
 	// InstallTimer();
 //*************************************************************** INTRO ********
-	// TIntro *Intro=new TIntro();
+	// TIntro *Intro=new TIntrateo();
 	// delete Intro;
 //**************************************************************** GAME ********
 	// do	{

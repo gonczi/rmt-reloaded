@@ -3,6 +3,7 @@
 
 // some common typedefinition and their functions
 
+#include <stdint.h>
 #include <math.h>
 
 long absl( long Num );

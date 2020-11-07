@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(rmt VERSION 0.1.0)
 
+file(COPY img DESTINATION .)
+
 include(CTest)
 enable_testing()
 
