@@ -2,6 +2,12 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../../../../vc/sdl_demo/01_hello_SDL"
+		},
+		{
+			"path": "../../../../vc/sdl_demo/02_getting_an_image_on_the_screen"
 		}
 	],
 	"settings": {

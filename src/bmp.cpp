@@ -122,7 +122,7 @@ int TBmp::Load(const char *iFname)
 
 void TBmp::Draw( int X , int Y )	
 {
-	PutImage(X,Y, Pic ,Rect.Sx,Rect.Sy);
+	PutImage(X, Y, Pic ,Rect.Sx, Rect.Sy);
 }
 
 void TBmp::Perror()	

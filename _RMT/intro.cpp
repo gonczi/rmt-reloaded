@@ -3,7 +3,7 @@
 ******************************************************************************/
 #ifndef _INTRO_CPP
 	#define _INTRO_CPP
-// az inro képek mozagtásának folyamatai
+// az inro kï¿½pek mozagtï¿½sï¿½nak folyamatai
 #include <math.h>
 #include "typedef.cpp"
 #include "timer.cpp"
@@ -25,7 +25,7 @@ TIntro::TIntro()	{
 	char *iBgr=NULL;
 	TBmp *IntroPic=NULL;
 	long PCount=0;
-//***************************************************     BEÚSZÁS    *********
+//***************************************************     BEï¿½SZï¿½S    *********
 	TBmp * Mandel=new TBmp ;
 	Mandel->Load( IntroFiles[0] );
 	Mandel->Draw(0,0);

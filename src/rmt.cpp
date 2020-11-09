@@ -4,9 +4,9 @@ long _SpeedNum=0;
 #include "typedef.h"
 // #include "error.cpp"
 // #include "scancode.cpp"
-// #include "graph13.cpp"
-// #include "timer.cpp"
-// #include "intro.cpp"
+#include "graph13.h"
+#include "timer.h"
+#include "intro.h"
 // #include "obj.cpp"
 // #include "pic_serv.cpp"
 // #include "init.cpp"
@@ -23,13 +23,13 @@ int main()
         return -1;
     }
 //*************************************************************** INIT *********
-	// Init13();
-	// InitMainPal();
+	Init13();
+	InitMainPal();
 	// InitScan();
-	// InstallTimer();
+	InstallTimer();
 //*************************************************************** INTRO ********
-	// TIntro *Intro=new TIntrateo();
-	// delete Intro;
+	TIntro *Intro = new TIntro();
+	delete Intro;
 //**************************************************************** GAME ********
 	// do	{
 	// 	TMenu *Menu=new TMenu();
@@ -44,9 +44,9 @@ int main()
 	// 	if ( GLevel==-1 ) GameOver();
 	// }	while ( GLevel==-1 );
 //**************************************************************** END *********
-	// ResumeTimer();
+	ResumeTimer();
 	// DoneScan();
-	// Done13();
+	Done13();
 
 	return 0;
 }

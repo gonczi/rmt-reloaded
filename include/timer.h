@@ -21,4 +21,8 @@ public:
 	BOOL DelTimer( int Id  );                          // id�z�t� v�ge
 };
 
+void InstallTimer();
+void FlushTimer();
+void ResumeTimer();	
+
 #endif //_TIMER_CPP
