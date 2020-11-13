@@ -3,7 +3,7 @@ long _SpeedNum=0;
 
 #include "typedef.h"
 // #include "error.cpp"
-// #include "scancode.cpp"
+#include "scancode.h"
 #include "graph13.h"
 #include "timer.h"
 #include "intro.h"
@@ -14,6 +14,7 @@ long _SpeedNum=0;
 // #include "gameover.cpp"
 
 #include <stdio.h>
+#include <unistd.h>
 
 int GLevel = 1;
 
@@ -25,13 +26,13 @@ int main()
 //*************************************************************** INIT *********
 	Init13();
 	InitMainPal();
-	// InitScan();
+	InitScan();
 	InstallTimer();
 //*************************************************************** INTRO ********
 	TIntro *Intro = new TIntro();
 	delete Intro;
 //**************************************************************** GAME ********
-	// do	{
+	do	{
 	// 	TMenu *Menu=new TMenu();
 	// 	delete Menu;
 	// 	GLevel=1;
@@ -42,10 +43,11 @@ int main()
 	// 		PicServer::FreeAll();
 	// 	};
 	// 	if ( GLevel==-1 ) GameOver();
-	// }	while ( GLevel==-1 );
+		sleep(1);
+	}	while ( GLevel==-1 );
 //**************************************************************** END *********
 	ResumeTimer();
-	// DoneScan();
+	DoneScan();
 	Done13();
 
 	return 0;

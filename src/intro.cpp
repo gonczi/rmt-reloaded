@@ -8,9 +8,7 @@
 #include "graph13.h"
 #include "bmp.h"
 #include "picclass.h"
-// #include "pic_serv.cpp"
-
-#define SPC FALSE // TODO
+#include "scancode.h"
 
 const char *TIntro::IntroFiles[] = { 
 	"intro/mandel" , 
@@ -44,7 +42,9 @@ TIntro::TIntro()
 		return;
 	}
 	IntroPic->Load( IntroFiles[1] );	
-	// while ( SPC );
+	while ( SPC ) {
+		usleep(1000);
+	};
 	SetTimer( 1 , INC_COUNT , 60 );
 	int High=20;
 	GetImage( 0,0,iBgr,320,200 );
@@ -68,7 +68,7 @@ TIntro::TIntro()
 	delete IntroPic;
 	free ( iBgr );
 	DelTimer( 1 );
-	// if ( SPC ) return;
+	if ( SPC ) return;
 // //**************************************************************** EGO *******
 	char *Bgr=NULL;
 	TPicClass *Owl=NULL;

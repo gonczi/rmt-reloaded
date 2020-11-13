@@ -1,5 +1,6 @@
 #include "graph13.h"
 #include "error.h"
+#include "scancode.h"
 
 #include <thread>
 #include <unistd.h>
@@ -301,7 +302,7 @@ pixel_t palette[256] =
 	{  0,  0,  0}
 };
 
-pixel_t pixels[MAXX * MAXY] = {0};
+pixel_t pixels[MAXX * MAXY * 4] = {0};
 
 bool graph13TaskRun = true;
 thread *graph13TaskThread = NULL;
@@ -320,17 +321,23 @@ void sync_segabuff()
 
 	for (int x = 0; x < MAXX; x++) {
 		for (int y = 0; y < MAXY; y++) {
-			int pos = x + (y * MAXX);
+			int srcpos = x + (y * MAXX);
+			// pixels[srcpos] = palette[sega000_buff[srcpos]];
 
-			pixels[pos] = palette[sega000_buff[pos]];
+			// double it:
+			int pos = (x*2) + (y * 2 * MAXX * 2);
+			pixels[pos] = palette[sega000_buff[srcpos]];
+			pixels[pos+1] = pixels[pos];
+			pixels[pos+(MAXX*2)] = pixels[pos];
+			pixels[pos+(MAXX*2)+1] = pixels[pos];
 		}	
 	}
 
 	drawSurface = SDL_CreateRGBSurfaceFrom((void*)pixels,
-					MAXX,
-					MAXY,
+					MAXX * 2,
+					MAXY * 2,
 					3 * 8,          		// bits per pixel = 24
-					MAXX * 3,  				// pitch
+					MAXX * 2 * 3,  				// pitch
 					0x0000FF,              	// red mask
 					0x00FF00,              	// green mask
 					0xFF0000,              	// blue mask
@@ -486,8 +493,8 @@ void Init13(void)
 			"RMT (reloaded)", 
 			SDL_WINDOWPOS_UNDEFINED, 
 			SDL_WINDOWPOS_UNDEFINED, 
-			MAXX, 
-			MAXY, 
+			MAXX * 2, 
+			MAXY * 2, 
 			0 // TODO: SDL_WINDOW_FULLSCREEN
 		);
 		if (window == NULL) {
