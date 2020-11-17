@@ -7,11 +7,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#ifndef O_BINARY
-# define O_BINARY  0
-# define O_TEXT    0
-#endif
-
 // #include <alloc.h>
 // #include <mem.h>
 // #include <math.h>

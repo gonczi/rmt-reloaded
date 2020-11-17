@@ -17,13 +17,8 @@ class Pic_Row	{          // egy oszlop le�r� rekordja
 public:
 	int Num;               // vektorok sz�ma az oszlopban
 	Pic_Vector *Vector;    // a vektor t�mb els� elem�nek c�me
-	Pic_Row()	{
-		Vector=NULL;
-		Num=0;
-	};
-	~Pic_Row()	{
-		if ( Vector ) delete Vector;
-	};
+	Pic_Row();
+	~Pic_Row();
 };
 //-----------------------------------------------------------------------------
 class TPicture	{

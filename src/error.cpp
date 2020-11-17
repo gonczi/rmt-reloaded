@@ -3,10 +3,10 @@
 
 void Perror(const char *str)
 {
-    printf(str);
+    printf("%s", str);
 }
 
 void _Perror(const char *str, ...)
 {
-    printf(str);
+    printf("%s", str);
 }

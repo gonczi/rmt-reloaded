@@ -1,5 +1,12 @@
 #include "typedef.h"
 
+#include <stdio.h>
+
+void itoa(int n, char* str, int p)
+{
+	sprintf(str, "%d", n);
+}
+
 long absl( long Num )	{       // abszolut �rt�k long t�pusra
 	return (Num<0)?(-Num):Num;
 }

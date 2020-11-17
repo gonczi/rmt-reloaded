@@ -3,15 +3,12 @@
 ******************************************************************************/
 #ifndef _GRAPH13_CPP
 	#define _GRAPH13_CPP
-// grafikus kezelõ függvények
+// grafikus kezelï¿½ fï¿½ggvï¿½nyek
 #include "typedef.cpp"
 #include "error.cpp"
 
-char Mode;                  // képernyõ mód puffere
-long sega000=0xA0000000L;   // képernyõ segmens kezdõcíme
-
-#define MAXY 200            // képernyõ felbontás függõleges irányban
-#define MAXX 320            // képernyõ felbontás vízszintes irányban
+char Mode;                  // kï¿½pernyï¿½ mï¿½d puffere
+long sega000=0xA0000000L;   // kï¿½pernyï¿½ segmens kezdï¿½cï¿½me
 
 BYTE Add(BYTE col1,BYTE col2);
 void PutPixel(int X,int Y,char N);
@@ -20,11 +17,11 @@ void Wait(void);
 void SetPalette(char Color,char Red,char Green,char Blue);
 //*****************************************************************************/
 //*****************************************************************************/
-int IntAbs( int Num )	{   // abszolut érték függvény int típusra
+int IntAbs( int Num )	{   // abszolut ï¿½rtï¿½k fï¿½ggvï¿½ny int tï¿½pusra
 	return (Num<0)?-Num:Num;
 }
 
-// képernyõ terület elszínezése adott színnel, spec efektussal.
+// kï¿½pernyï¿½ terï¿½let elszï¿½nezï¿½se adott szï¿½nnel, spec efektussal.
 void ColoredBarLines( POINT Poz , RECT Rect , BYTE Color )	{
 	Wait();
 	for ( int Y=Poz.y ; Y<(Poz.y+Rect.Sy) ; Y+=2 )	{
@@ -35,7 +32,7 @@ void ColoredBarLines( POINT Poz , RECT Rect , BYTE Color )	{
 		}
 	}
 };
-// képernyõ terület elszínezése adott színnel, spec efektus nélkül fentrõl lefelé.
+// kï¿½pernyï¿½ terï¿½let elszï¿½nezï¿½se adott szï¿½nnel, spec efektus nï¿½lkï¿½l fentrï¿½l lefelï¿½.
 void ColoredBar( POINT Poz , RECT Rect , BYTE Color )	{
 	Wait();
 	for ( int Y=Poz.y ; Y<(Poz.y+Rect.Sy) ; Y++ )	{
@@ -44,8 +41,8 @@ void ColoredBar( POINT Poz , RECT Rect , BYTE Color )	{
 		}
 	}
 };
-// adott képernyõ területre áttetszõ képet fest fel, améretei a képnek
-// azonosak a képernyõ területével:
+// adott kï¿½pernyï¿½ terï¿½letre ï¿½ttetszï¿½ kï¿½pet fest fel, amï¿½retei a kï¿½pnek
+// azonosak a kï¿½pernyï¿½ terï¿½letï¿½vel:
 void ColoredBar( POINT Poz , RECT Rect , char *Pic )	{
 //	wait();
 	for ( int Y=Poz.y ; Y<(Poz.y+Rect.Sy) ; Y++ )	{
@@ -55,7 +52,7 @@ void ColoredBar( POINT Poz , RECT Rect , char *Pic )	{
 		}
 	}
 };
-// két szín azonosítõ összeadása a standard színpaletta használatatkor:
+// kï¿½t szï¿½n azonosï¿½tï¿½ ï¿½sszeadï¿½sa a standard szï¿½npaletta hasznï¿½latatkor:
 BYTE Add(BYTE col1,BYTE col2)	{
 	BYTE ret;
 	ret=(((col1&3)+(col2&3))>>1);
@@ -63,27 +60,27 @@ BYTE Add(BYTE col1,BYTE col2)	{
 	ret+=((((col1>>5)+(col2>>5))>>1)<<5);
 	return ret;
 }
-// beállítja a standard szín palettát:
+// beï¿½llï¿½tja a standard szï¿½n palettï¿½t:
 void InitMainPal()	{
 	for ( int c=0 ; c<256 ; c++ )
 		SetPalette(c , (c/32)*8 , (((c%32)/4)*8) , (c%4)*21 );
 }
-// grafikus képernyõ törlése
+// grafikus kï¿½pernyï¿½ tï¿½rlï¿½se
 void ClearDevice()	{
 	for ( register int poz=(320*200); poz ; *(char far *)(sega000+poz--)=0 );
 };
-// képernyõ törlése színnel
+// kï¿½pernyï¿½ tï¿½rlï¿½se szï¿½nnel
 void FillScreen(char color)	{
 	for ( register int poz=(320*200); poz ; *(char far *)(sega000+poz--)=color );
 };
-// kép kirajzolása :
-//          args:  hova x,y , adatok címe , méret Sx,Sy
+// kï¿½p kirajzolï¿½sa :
+//          args:  hova x,y , adatok cï¿½me , mï¿½ret Sx,Sy
 void PutImage (int x,int y,char *src,int i,int j)	{
 	for ( int cy=0 ; cy<(((j+y)>=200)?(200-y):j) ; cy++ )
 		memcpy((void far *)(sega000+(((((y+cy)<0)?0:(y+cy)))*320L)+x),&src[cy*i],
 			((i+x)>=320)?(320-x):i  );
 };
-// memória terület másolása a null értékek nélkül
+// memï¿½ria terï¿½let mï¿½solï¿½sa a null ï¿½rtï¿½kek nï¿½lkï¿½l
 void fmemzerocpy(void far *dest,void *src,unsigned length)
 {
 	char puff;
@@ -91,18 +88,18 @@ void fmemzerocpy(void far *dest,void *src,unsigned length)
 		if ( (puff=(((char *)src)[l]))!=0 )
 			(((char far *)dest)[l])=puff;
 };
-// kép felfestése, a nulla színkódok nélkül:
+// kï¿½p felfestï¿½se, a nulla szï¿½nkï¿½dok nï¿½lkï¿½l:
 void PutImageNull (int x,int y,char *src,int i,int j)	{
 	for ( int cy=0 ; cy<(((j+y)>=200)?(200-y):j) ; cy++ )
 		fmemzerocpy((void far *)(sega000+(((((y+cy)<0)?0:(y+cy)))*320L)+x),&src[cy*i],
 			((i+x)>=320)?(320-x):i  );
 };
-// képernyõ terület elmentése
+// kï¿½pernyï¿½ terï¿½let elmentï¿½se
 void GetImage (int x,int y,char *src,int i,int j)	{
 	for ( unsigned cy=0 ; cy<j ; cy++ )
 	_fmemcpy(&src[cy*i],(void far *)(sega000+((y+cy)*320L)+x),i);
 };
-// várakozás vertikális visszafutásra a monitoron
+// vï¿½rakozï¿½s vertikï¿½lis visszafutï¿½sra a monitoron
 void Wait(void)	{
 	asm {
 	mov dx,0x03da };
@@ -112,7 +109,7 @@ wait:
 	and al,8
 	jz  wait};
 };
-// bekapcsolja a grafikus üzemmódot, és menti az elõzõ beállítást
+// bekapcsolja a grafikus ï¿½zemmï¿½dot, ï¿½s menti az elï¿½zï¿½ beï¿½llï¿½tï¿½st
 void Init13(void)	{
 	asm {
 		MOV AH,0x0F
@@ -122,7 +119,7 @@ void Init13(void)	{
 		INT 0x10
 	}
 }
-// vissza állítja az eredeti képernyõ módot
+// vissza ï¿½llï¿½tja az eredeti kï¿½pernyï¿½ mï¿½dot
 void Done13(void)	{
 	asm {
 		MOV AL,Mode
@@ -130,7 +127,7 @@ void Done13(void)	{
 		INT 0x10
 	}
 }
-// pixel kigyújtása megszakításon keresztül
+// pixel kigyï¿½jtï¿½sa megszakï¿½tï¿½son keresztï¿½l
 void PutPixel(int X,int Y,char N)	{
 	Y*=320;
 	asm {
@@ -143,12 +140,12 @@ void PutPixel(int X,int Y,char N)	{
 	STOSB
 	}
 };
-// pixel kigyújtása közvetlen memõriába írással
+// pixel kigyï¿½jtï¿½sa kï¿½zvetlen memï¿½riï¿½ba ï¿½rï¿½ssal
 void PutPixel13(int X,int Y,char N)	{
 	unsigned char far *sp=(unsigned char far *)sega000+X+(Y*320);
 	*sp=N;
 }
-// pixel syínének lekérdezése
+// pixel syï¿½nï¿½nek lekï¿½rdezï¿½se
 char GetPixel(int X,int Y)	{
 	Y*=320;
 	asm {
@@ -161,7 +158,7 @@ char GetPixel(int X,int Y)	{
 	}
 	return(_AL);
 };
-// egyenes húzása
+// egyenes hï¿½zï¿½sa
 void Straight(int x1,int y1,int x2,int y2,int c)	{
 	if ( (x1==x2) && (y1==y2) ) PutPixel(x1,y1,c);
 	else	{
@@ -175,17 +172,17 @@ void Straight(int x1,int y1,int x2,int y2,int c)	{
 				PutPixel(x1-(fi*n),y1-n,c);
 	};
 };
-// kitöltöött négyzet kirajzolása
+// kitï¿½ltï¿½ï¿½tt nï¿½gyzet kirajzolï¿½sa
 void Bar(int X1,int Y1,int X2,int Y2,char N)	{
 	int x,y;
 	for ( x=X1 ; x<X2 ; x++ )
 		for ( y=Y1; y<Y2 ; y++)
 			PutPixel(x,y,N);
 };
-// egy szín RGB összetevõinek beállítása:
+// egy szï¿½n RGB ï¿½sszetevï¿½inek beï¿½llï¿½tï¿½sa:
 void SetPalette(char Color,char Red,char Green,char Blue)	{
 	asm {  /*
-	MOV DX,03DAh };       // nincs várakozás
+	MOV DX,03DAh };       // nincs vï¿½rakozï¿½s
 L1:
 	asm {
 	IN AL,DX
@@ -207,7 +204,7 @@ L2:
 	MOV AL,Blue
 	OUT DX,AL }
 };
-// teljes paletta beállítása tömbön keresztül várakozás nélkül
+// teljes paletta beï¿½llï¿½tï¿½sa tï¿½mbï¿½n keresztï¿½l vï¿½rakozï¿½s nï¿½lkï¿½l
 void SetPaletteRegistersNoWait(	unsigned char Start,
 											unsigned Number,
 											void far*Table)	{
@@ -230,7 +227,7 @@ L2:
 	INT 0x10
 	};
 };
-// teljes paletta beállítása tömbön keresztül várakozással
+// teljes paletta beï¿½llï¿½tï¿½sa tï¿½mbï¿½n keresztï¿½l vï¿½rakozï¿½ssal
 void SetPaletteRegisters(unsigned char Start,unsigned Number,void far*Table)	{
 //	void *L1,*L2;
 	asm {
@@ -255,7 +252,7 @@ L2:
 	INT 0x10
 	};
 };
-// a teljes szín paletta lekétdezése
+// a teljes szï¿½n paletta lekï¿½tdezï¿½se
 void GetPaletteRegisters(unsigned char Start,unsigned Number,void far* Table)	{
 	asm {
 		  XOR BH,BH

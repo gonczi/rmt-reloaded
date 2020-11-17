@@ -587,7 +587,7 @@ void SetPalette(uint8_t Color, uint8_t Red, uint8_t Green, uint8_t Blue)
 // teljes paletta be�ll�t�sa t�mb�n kereszt�l v�rakoz�s n�lk�l
 void SetPaletteRegistersNoWait(	unsigned char Start,
 											unsigned Number,
-											void far*Table)	
+											void *Table)	
 {
 // //	void *L1,*L2;
 // 	asm {
@@ -610,7 +610,7 @@ void SetPaletteRegistersNoWait(	unsigned char Start,
 };
 
 // teljes paletta be�ll�t�sa t�mb�n kereszt�l v�rakoz�ssal
-void SetPaletteRegisters(unsigned char Start,unsigned Number,void far*Table)	
+void SetPaletteRegisters(unsigned char Start,unsigned Number,void *Table)	
 {
 // //	void *L1,*L2;
 // 	asm {
@@ -637,7 +637,7 @@ void SetPaletteRegisters(unsigned char Start,unsigned Number,void far*Table)
 };
 
 // a teljes sz�n paletta lek�tdez�se
-void GetPaletteRegisters(unsigned char Start,unsigned Number,void far* Table)	
+void GetPaletteRegisters(unsigned char Start,unsigned Number,void * Table)	
 {
 	// asm {
 	// 	  XOR BH,BH

@@ -10,8 +10,8 @@ public:
 	TPicture *Pic;           // k�p t�mb mutat�ja
 	TPicClass();
 	~TPicClass();
-	int Load( const char *Fnam );   // bet�lt�s list�r�l
-	int Load( const char *Arg[], int len );         // bet�lt�s string t�mbb�l
+	int Load( char *Fname , ... );   // bet�lt�s list�r�l
+	int Load( char *Arg[] );         // bet�lt�s string t�mbb�l
 	BOOL GetRect( int Id , RECT &Rect  );
 	BOOL Draw( int Id , int x , int y );
 };

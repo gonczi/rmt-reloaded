@@ -24,18 +24,19 @@ TPicClass::~TPicClass()	{
 	};
 };
 //*****************************************************************************}
-int TPicClass::Load( const char *Arg[], int len )	{
+int TPicClass::Load( char *Arg[] )	{
 	if ( Pic ) return ERR_TWICE;
-	Layers = len;
+	Layers=0;
+	while ( Arg[ Layers ] ) Layers++;
 	Pic =new TPicture[ Layers ] ;
 	for ( int Lyr=0; Lyr< Layers ; Lyr++ )
 		Pic[Lyr].Load( Arg[Lyr] );
 	return ERR_OK;
 };
 //*****************************************************************************}
-int TPicClass::Load( const char *Fname )	{
-	const char * *Arg = &Fname;
-	return Load(Arg, 1);
+int TPicClass::Load( char *Fname , ... )	{
+	char * *Arg=&Fname;
+	return Load(Arg);
 };
 //*****************************************************************************
 // az objektum �ltal kezelt k�pek egyik�nek m�retei

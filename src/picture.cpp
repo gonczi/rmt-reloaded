@@ -4,6 +4,22 @@
 #include "error.h"
 #include "graph13.h"
 
+Pic_Row::Pic_Row()
+	:Vector(NULL)
+	,Num(0)
+{
+	;
+};
+
+Pic_Row::~Pic_Row()	
+{
+	if (Vector) {
+		// delete[] Vector; FIXME: !!!
+		Vector = NULL;
+		Num = 0;
+	}
+};
+
 //*****************************************************************************
 TPicture::TPicture()	{
 	Row=NULL;

@@ -11,9 +11,12 @@
 #include <thread>
 #include <unistd.h>
 
+#include "mouse.h"
+
 using namespace std;
 
 char KTB[129] = {0};                 // a GLOB�LIS SCAN k�d t�mb  !!!
+char kbHit = 0;
 
 bool scancodeTaskRun = true;
 thread *scancodeTaskThread = NULL;
@@ -58,6 +61,7 @@ KSTRN KeyNameStr[]={
 
 // a keres�st egyszer�s�t� seg�dt�bla:
 // char KeyNameChr[]= "QWERTZUIOP....ASDFGHJKL..0..YXCVBNM,.-.";
+char KeyNameChr[]= "ABDEFGHIJKLMNOPQRSTUVWXZY";
 
 // hasznos f�ggv�ny egy scan-k�d nev�nek meghat�roz�s�ra
 const char *GetKeyName( int K , char *name )	
@@ -71,17 +75,23 @@ const char *GetKeyName( int K , char *name )
 	}
 	
 	// char num[6];                            // keres�s a karakter t�bl�zatban
-	// if ( (K>=16) && (K<=(16+strlen(KeyNameChr))) )	{
-	// 	name[0]=KeyNameChr[K-16];            // 16 == Q bill. scan k�dja
-	// 	name[1]=0;                           // ami a t�mb els� eleme
-	// 	return name;
-	// }
+	if ((K >= 4) && (K <= (4 + strlen(KeyNameChr))) )	{
+		name[0] = KeyNameChr[K-4];            // 4 == A bill. scan k�dja
+		name[1] = 0;                           // ami a t�mb els� eleme
+		return name;
+	}
 
-	// if ( (K>=2) && (K<=10) )	{       // ha a scan-k�d egy sz�mjegyhez tartozik
-	// 	name[0]='1'+(K-2);
-	// 	name[1]=0;
-	// 	return name;
-	// }
+	if ((K >= 30) && (K <= 38))	{       // ha a scan-k�d egy sz�mjegyhez tartozik
+		name[0]='1'+(K-30);
+		name[1]=0;
+		return name;
+	}
+
+	if (K == 53) {
+		name[0]='0';
+		name[1]=0;
+		return name;
+	}
 	
 	// if ( (K>=59) && (K<=68) )	{    // a scan k�d funkci�� billenty�
 	// 	sprintf(name, "FIX%d", K-58);
@@ -95,24 +105,34 @@ const char *GetKeyName( int K , char *name )
 char CodeToCh( int K )	
 {             // ha a kerestt k�d biztosan egy karakter
 	char name=0;                       // akkor ez a f�ggv�ny is elegend�
-// 	if ( (K>=16) && (K<=(16+strlen(KeyNameChr))) )	{
-// 		name=KeyNameChr[K-16];          // jellemz�en z�veg beolvas�shoz sz�ks�ges
-// 	}                                  // f�ggv�ny
-// 	if ( (K>=2) && (K<=10) )	{
-// 		name='1'+(K-2);
-// 	}
-// 	if ( K==57 )	{                   // �s ismeri a ' ' karaktert is
-// 		name=' ';
-// 	}
+	if ( (K>=4) && (K<=(4+strlen(KeyNameChr))) )	{
+		name=KeyNameChr[K-4];          // jellemz�en z�veg beolvas�shoz sz�ks�ges
+	}                                  // f�ggv�ny
+	if ( (K>=30) && (K<=38) )	{
+		name='1'+(K-30);
+	}
+	if ( K==53 )	{                   // �s ismeri a ' ' karaktert is
+		name='0';
+	}
+	if ( K==44 )	{                   // �s ismeri a ' ' karaktert is
+		name=' ';
+	}
 	return name;
 }
 
 BOOL KbHit()	
 {    			 // primit�v figyel� f�ggv�ny bill. lenyom�sra
-	for ( int blk=0 ; blk<(128/sizeof( long )) ; blk++)	{
-		if ( *(long *)&KTB[ blk*sizeof( long ) ] ) return TRUE;
-	}
-	return FALSE;
+	// for ( int blk=0 ; blk<(128/sizeof( long )) ; blk++)	{
+	// 	if ( *(long *)&KTB[ blk*sizeof( long ) ] ) {
+
+	// 		printf("kbhit - true\n");
+	// 		return TRUE;
+	// 	}
+	// }
+	// printf("kbhit - false\n");
+	// return FALSE;
+
+	return kbHit;
 }
 
 /* hasonl� az el�z�h�z csak a CTRL bill.-t nem
@@ -122,14 +142,19 @@ int GetCh()
 {
 	for ( int key=0; key<128 ; (key==41)?(key+=2):(key++) )	{
 		if ( KTB[key] )	{
+			printf("getch - %d\n", key);
 			return( key );
 		}
 	}
+
+	printf("getch - %d\n", 0);
 	return 0 ;
 }
 
 void updateKTB( SDL_KeyboardEvent *key )
 {
+	kbHit = (key->type == SDL_KEYDOWN);
+
 	/* Is it a release or a press? */
 	KTB[key->keysym.scancode & 0x7F] = !(key->type == SDL_KEYUP);
 
@@ -164,11 +189,25 @@ void scancodeTask(string msg)
 	// printf("scancodeTask - START %d\n", scancodeTaskRun);
 	/* Poll for events */
 	while( scancodeTaskRun && SDL_WaitEvent( &event ) ){
-		
+
 		switch( event.type ) {
+
 			case SDL_KEYDOWN:
 			case SDL_KEYUP:
 				updateKTB( &event.key );
+				break;
+
+			case SDL_MOUSEMOTION:
+				mouse_pos_x = event.motion.x / 2;
+				mouse_pos_y = event.motion.y / 2;
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:
+				mouse_click = true;
+				break;
+
+			case SDL_MOUSEBUTTONUP:
+				mouse_click = false;
 				break;
 
 			/* SDL_QUIT event (window close) */

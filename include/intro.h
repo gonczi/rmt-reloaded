@@ -8,7 +8,7 @@ class TIntro: TTimer
 {
 	BOOL Quit;
 public:
-	static const char *IntroFiles[];
+	static char *IntroFiles[];
 	TIntro();
 };
 

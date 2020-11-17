@@ -3,7 +3,7 @@
 *******************************************************************************/
 #ifndef _BMP_CPP
 	#define _BMP_CPP
-// TBmp osztály definíciója
+// TBmp osztï¿½ly definï¿½ciï¿½ja
 #include <string.h>
 #include <io.h>
 #include <fcntl.h>
@@ -15,19 +15,19 @@
 #include "graph13.cpp"
 #include "error.cpp"
 #include "typedef.cpp"
-#define BMP_FLAG ".BIN"    // bitmap fájlnevek kiterjesztése
+#define BMP_FLAG ".BIN"    // bitmap fï¿½jlnevek kiterjesztï¿½se
 
-// hibakódok
+// hibakï¿½dok
 typedef enum TError{ ERR_OK ,ERR_TWICE , ERR_NO_MEM , ERR_NO_OPEN ,
 		ERR_NO_READ , ERR_REALLOC};
-// egy szín RGB struktúrája
+// egy szï¿½n RGB struktï¿½rï¿½ja
 struct TColor	{
 	char B;
 	char G;
 	char R;
 	char L;
 };
-// BMP256 fájl fejléce
+// BMP256 fï¿½jl fejlï¿½ce
 struct THeader		{
 	char NOTINP_1 [18];
 	unsigned long X;
@@ -36,23 +36,23 @@ struct THeader		{
 	TColor Pal[256];
 };
 //------------------------------------------------------------------------------
-class TBmp	{   // bitmap ostály
+class TBmp	{   // bitmap ostï¿½ly
 public:
-	char *Fname;                   // fájl név
-	char *Pic;                     // a kép adatterülete
-	int X,Y;                       // méretei
-	unsigned Size;                 // adta terület mérete
-	char DeadColor;                // transzparens szín
-	RECT  Rect;                    // méretek ismét
-	int ErrNo;                     // a betöltés hibakódja
+	char *Fname;                   // fï¿½jl nï¿½v
+	char *Pic;                     // a kï¿½p adatterï¿½lete
+	int X,Y;                       // mï¿½retei
+	unsigned Size;                 // adta terï¿½let mï¿½rete
+	char DeadColor;                // transzparens szï¿½n
+	RECT  Rect;                    // mï¿½retek ismï¿½t
+	int ErrNo;                     // a betï¿½ltï¿½s hibakï¿½dja
 	TBmp();
 	~TBmp();
 	int Load( char * );
-	void Perror();                 // hiba kiiratása
-	void Draw( int , int );        // kép kirajzolása
-	void RPaint(int wx,int wy,int R)	;      // kép kirajzolás forgatva
-	void RDPaint(int wx,int wy,int R);      // kép kirajzolás forgatva transzparens színnel
-	void RPaint(int wx,int wy,int R,float s); // kép kirajzolás forgatva nyújtással
+	void Perror();                 // hiba kiiratï¿½sa
+	void Draw( int , int );        // kï¿½p kirajzolï¿½sa
+	void RPaint(int wx,int wy,int R)	;      // kï¿½p kirajzolï¿½s forgatva
+	void RDPaint(int wx,int wy,int R);      // kï¿½p kirajzolï¿½s forgatva transzparens szï¿½nnel
+	void RPaint(int wx,int wy,int R,float s); // kï¿½p kirajzolï¿½s forgatva nyï¿½jtï¿½ssal
 };
 
 //******************************************************************************
@@ -78,10 +78,10 @@ TBmp::~TBmp()	{
 //******************************************************************************
 
 int TBmp::Load(char *iFname)	{
-	if ( Pic )	return ERR_TWICE;           // hiba: kétszeres betöltés
+	if ( Pic )	return ERR_TWICE;           // hiba: kï¿½tszeres betï¿½ltï¿½s
 	Fname=(char *)malloc( 60 );
-	if ( !Fname ) return ERR_NO_MEM;        // hiba: nics memória
-	strcpy( Fname , "pictures\\" );         // fájl név összeállítása
+	if ( !Fname ) return ERR_NO_MEM;        // hiba: nics memï¿½ria
+	strcpy( Fname , "pictures\\" );         // fï¿½jl nï¿½v ï¿½sszeï¿½llï¿½tï¿½sa
 	strcat( Fname , iFname );
 	strcat( Fname , BMP_FLAG );
 	THeader *Header=new THeader;
@@ -92,7 +92,7 @@ int TBmp::Load(char *iFname)	{
 		Header=NULL;
 		return ErrNo=ERR_NO_OPEN;
 	}
-// fájl fejlécének betöltése
+// fï¿½jl fejlï¿½cï¿½nek betï¿½ltï¿½se
 	if ( read( File , Header , sizeof(THeader) )!= sizeof(THeader) ) 	{
 		close( File );
 		delete Header;
@@ -122,7 +122,7 @@ int TBmp::Load(char *iFname)	{
 		Pic=NULL;
 		return ErrNo=ERR_NO_MEM;
 	}
-	for ( int Py=0 ; Py<(Y>>1) ; Py++ )	{   // kép sorainak rendezése, zömítése
+	for ( int Py=0 ; Py<(Y>>1) ; Py++ )	{   // kï¿½p sorainak rendezï¿½se, zï¿½mï¿½tï¿½se
 		memcpy( Puff , &Pic [ Py*RSize ] , unsigned(RSize) );
 		memcpy( &Pic[ Py*X ] , &Pic[ (Y-Py-1)*RSize ] , unsigned( X ) );
 		memcpy( &Pic[ (Y-Py-1)*RSize ] , Puff , unsigned(RSize) );

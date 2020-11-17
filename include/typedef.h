@@ -17,6 +17,13 @@ float norm( float beta );
 
 typedef unsigned char BYTE;
 
+#ifndef O_BINARY
+# define O_BINARY  0
+# define O_TEXT    0
+#endif
+
+void itoa(int, char*, int);
+
 //*************************************************************** POINT
 
 class POINT 

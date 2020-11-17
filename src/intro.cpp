@@ -10,7 +10,7 @@
 #include "picclass.h"
 #include "scancode.h"
 
-const char *TIntro::IntroFiles[] = { 
+char *TIntro::IntroFiles[] = { 
 	"intro/mandel" , 
 	"intro/intro" , 
 	"intro/press" ,
@@ -77,7 +77,7 @@ TIntro::TIntro()
 		Perror( "Intro: new TPicCLass" );
 		return;
 	};
-	merno=Owl->Load( &IntroFiles[3], 6 );
+	merno=Owl->Load( &IntroFiles[3] );
 	if ( merno )	{
 		Perror( "Owl Load" );
 		delete Owl;

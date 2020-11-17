@@ -3,7 +3,7 @@
 //******************************************************************************
 #ifndef _FILEINSP_CPP
 	#define _FILEINSP_CPP
-// fájl ellenörzõ eljárások
+// fï¿½jl ellenï¿½rzï¿½ eljï¿½rï¿½sok
 #include <stdio.h>
 #include <conio.h>
 #include "typedef.cpp"
@@ -14,7 +14,7 @@
 #include "intro.cpp"
 #include <time.h>
 //******************************************************************************
-// kirak egy karaktert az adott pozicióra az adott színnel
+// kirak egy karaktert az adott poziciï¿½ra az adott szï¿½nnel
 void put(int x,int y,char kar,char c=WHITE , char bgr=BLACK)
 {
 	gotoxy( x ,y );
@@ -23,7 +23,7 @@ void put(int x,int y,char kar,char c=WHITE , char bgr=BLACK)
 	putch( kar );
 };
 //******************************************************************************
-// kiir egy nullával lezárt karakter sorozatot az adott pziciótól, adott színekkel
+// kiir egy nullï¿½val lezï¿½rt karakter sorozatot az adott pziciï¿½tï¿½l, adott szï¿½nekkel
 void out ( int x, int y , char * str , char c=WHITE , char bgr=BLACK )	{
 	int mx=wherex(),my=wherey();
 	gotoxy( x ,y );
@@ -94,7 +94,7 @@ BOOL FileInspecor()	{
 	while ( TIntro::IntroFiles[n] )	{
 		char Fname[80];
 		xLines();
-		strcpy( Fname , "> pictures\\" );
+		strcpy( Fname , "> img/" );
 		strcat( Fname , TIntro::IntroFiles[n] );
 		strcat( Fname , BMP_FLAG );
 		printf("%-50s", Fname );
@@ -108,7 +108,7 @@ BOOL FileInspecor()	{
 			case TBMP:
 			case TPICTURE:	{
 				xLines();
-				strcpy( Fname , "> pictures\\" );
+				strcpy( Fname , "> img/" );
 				strcat( Fname , Pic_Files[f].FName );
 				strcat( Fname , BMP_FLAG );
 				printf("%-50s", Fname );
@@ -119,7 +119,7 @@ BOOL FileInspecor()	{
 				int fa=0;
 				while ( Pic_Files[f].FNameArray[fa] )	{
 					xLines();
-					strcpy( Fname , "> pictures\\" );
+					strcpy( Fname , "> img/\\" );
 					strcat( Fname , Pic_Files[f].FNameArray[fa] );
 					strcat( Fname , BMP_FLAG );
 					printf("%-50s", Fname );

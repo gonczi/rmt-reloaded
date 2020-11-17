@@ -11,4 +11,6 @@ void xFind( char * , int &  );
 void xError( int &  );
 void xOk();
 
+extern long _SpeedNum;      
+
 #endif// _FILEINSP_CPP
