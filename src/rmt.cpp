@@ -42,7 +42,6 @@ int main()
 			PicServer::FreeAll();
 		};
 		// if ( GLevel==-1 ) GameOver();
-		sleep(1);
 	}	while ( GLevel==-1 );
 //**************************************************************** END *********
 	ResumeTimer();

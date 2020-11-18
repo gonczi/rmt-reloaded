@@ -118,7 +118,7 @@ int TLoop::Start()	{
 	while ( !ExitFlag )	{
 		register TObj *PProc=ObjList;
 		while ( PProc )	{
-			usleep(5000);
+			usleep(100);
 			PProc->Proc();            // objektum fut
 			PProc=PProc->Next;        // k�vetkez� objektum
 		}

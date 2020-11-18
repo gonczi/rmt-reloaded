@@ -11,11 +11,11 @@
 #include "typedef.h"
 #include "obj.h"
 #include "walls.h"
-// #include "crash.h"
-// #include "cat.h"
-// #include "cheese.h"
-// #include "basket.h"
-// #include "flower.h"
+#include "crash.h"
+#include "cat.h"
+#include "cheese.h"
+#include "basket.h"
+#include "flower.h"
 #include "usr.h"
 
 char *TInit::ObjFname[] = {	
@@ -35,20 +35,20 @@ TInit::TInit( int Lev ):TObj( DINAMIC ){
 			if ( LoadObjTable( ObjFname[ Level-1 ] ) )	{
 				for ( int x=0 ; x<SIZEX ; x++ )	{
 					for ( int y=0 ; y<SIZEY ; y++ )	{
-						// switch( ObjTable[y+x*SIZEX] )	{
-						// 	case 1:	{
-						// 		new TCat(  x , y  );
-						// 	} 	break;
-						// 	case 2:	{
-						// 		new TCheese ( x , y );
-						// 	}	break;
-						// 	case 3:	{
-						// 		new TBasket ( x , y );
-						// 	}	break;
-						// 	case 4:	{
-						// 		new TFlower ( x , y );
-						// 	}	break;
-						// }
+						switch( ObjTable[y+x*SIZEX] )	{
+							case 1:	{
+								new TCat(  x , y  );
+							} 	break;
+							case 2:	{
+								new TCheese ( x , y );
+							}	break;
+							case 3:	{
+								new TBasket ( x , y );
+							}	break;
+							case 4:	{
+								new TFlower ( x , y );
+							}	break;
+						}
 					}
 				}
 				free( ObjTable );
@@ -61,7 +61,7 @@ TInit::TInit( int Lev ):TObj( DINAMIC ){
 		}
 	}
 	Walls=new TWalls( Level );
-	// new TCrash();
+	new TCrash();
 	Register();
 }
 /*****************************************************************************/

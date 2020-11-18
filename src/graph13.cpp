@@ -519,9 +519,6 @@ void Done13(void)
 	graph13TaskRun = FALSE;
 	graph13TaskThread->join();
 
-	//Wait some
-	SDL_Delay(1000);
-
 	//Destroy window
 	SDL_DestroyWindow(window);
 
