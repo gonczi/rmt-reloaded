@@ -107,13 +107,13 @@ void TMotor::Proc()	{
 			register double b=(-Me->Fx);
 			for ( long fx=0 ; fx<(SIZEX-Me->SectorX) ; fx++ )	{
 				register float a;
+				register unsigned wx,wy;
 				b+=MRECT;
 				a=tan(beta)*b;
 				long ar=((Me->Fy+a)/MRECT-((a<0)?1:0));
-				register int wx,wy;
-				wx=int(Me->SectorX+fx+1);
-				wy=int(ar+Me->SectorY);
-				if ( TableV[wx][wy] )	{
+				wx=unsigned(Me->SectorX+fx+1);
+				wy=unsigned(ar+Me->SectorY);
+				if ( (SIZEX > wx) && (SIZEY > wy) && TableV[wx][wy] )	{
 					idV=TableV[wx][wy];
 					shiftV=(long(a+Me->Fy)-long(ar*MRECT));
 					shiftV=( (*Wall[idV])->X*(shiftV/MRECT));
@@ -125,13 +125,13 @@ void TMotor::Proc()	{
 				register float b=(MRECT-Me->Fx);
 				for ( long fx=0 ; fx>(-(Me->SectorX+1)) ; fx-- )	{
 				register float a;
-				register int wx,wy;
+				register unsigned wx,wy;
 				b-=MRECT;
 				a=tan(beta)*b;
 				long ar=((Me->Fy+a)/MRECT-((a<0)?1:0));
-				wx=int(Me->SectorX+fx);
-				wy=int(ar+Me->SectorY);
-				if ( TableV[wx][wy] )	{
+				wx=unsigned(Me->SectorX+fx);
+				wy=unsigned(ar+Me->SectorY);
+				if ( (SIZEX > wx) && (SIZEY > wy) && TableV[wx][wy] )	{
 					idV=TableV[wx][wy];
 					shiftV=(long(a+Me->Fy)-long(ar*MRECT));
 					shiftV=((*Wall[idV])->X*(shiftV/MRECT));
@@ -143,13 +143,13 @@ void TMotor::Proc()	{
 	if ( sinb> BLINDSTAIN ) {				// horizont�lis falak d�li ir�nyban
 			for ( long fy=0 ; fy<(SIZEY-Me->SectorY) ; fy++ ) {
 				register float a,b;
-				register int wx,wy;
+				register unsigned wx,wy;
 				a=((MRECT-Me->Fy)+(fy*MRECT));
 				b=(a/tan(beta));
 				long br=((Me->Fx+b)/MRECT-((b<0)?1:0));
-				wx=int(br+Me->SectorX);
-				wy=int(Me->SectorY+fy+1);
-				if ( TableH[wx][wy] ) {
+				wx=unsigned(br+Me->SectorX);
+				wy=unsigned(Me->SectorY+fy+1);
+				if ( (SIZEX > wx) && (SIZEY > wy) && TableH[wx][wy] )	{
 					idH=TableH[wx][wy];
 					shiftH=(long(b+Me->Fx)-long(br*MRECT));
 					shiftH=((*Wall[idH])->X*(shiftH/MRECT));
@@ -160,13 +160,13 @@ void TMotor::Proc()	{
 	} else if ( sinb< -BLINDSTAIN ) {  // horizont�lis falak �szakra
 				for ( long fy=0 ; fy>(-(Me->SectorY+1)) ; fy-- ) {
 					register float a,b;
-					register int wx,wy;
+					register unsigned wx,wy;
 					a=((fy*MRECT)-Me->Fy);
 					b=(a/tan(beta));
 					long br=((Me->Fx+b)/MRECT-((b<0)?1:0));
-					wx=int(br+Me->SectorX);
-					wy=int(Me->SectorY+fy);
-					if ( TableH[wx][wy]) {
+					wx=unsigned(br+Me->SectorX);
+					wy=unsigned(Me->SectorY+fy);
+				if ( (SIZEX > wx) && (SIZEY > wy) && TableH[wx][wy] )	{
 						idH=TableH[wx][wy];
 						shiftH=(long(b+Me->Fx)-long(br*MRECT));
 						shiftH=((*Wall[idH])->X*(shiftH/MRECT));
